@@ -47,5 +47,15 @@ public class GameTest {
 
         assertEquals("Pippo rolls 4, 2. Pippo moves from Start to 6", result);
     }
+
+    @Test
+    void movePlayerBy12() {
+        game.run("add player Pippo");
+        game.run("add player Pluto");
+
+        String result = game.run("move Pluto 6, 6");
+
+        assertEquals("Pluto rolls 6, 6. Pluto moves from Start to 12", result);
+    }
 }
 
