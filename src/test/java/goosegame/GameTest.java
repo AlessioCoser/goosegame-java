@@ -39,9 +39,8 @@ public class GameTest {
     }
 
     @Test
-    void movePlayer() {
+    void movePlayerFromStart() {
         game.run("add player Pippo");
-        game.run("add player Pluto");
 
         String result = game.run("move Pippo 4, 2");
 
@@ -49,13 +48,22 @@ public class GameTest {
     }
 
     @Test
-    void movePlayerBy12() {
-        game.run("add player Pippo");
+    void movePlayerFromStartBy12() {
         game.run("add player Pluto");
 
         String result = game.run("move Pluto 6, 6");
 
         assertEquals("Pluto rolls 6, 6. Pluto moves from Start to 12", result);
+    }
+
+    @Test
+    void movePlayerFromPreviousPosition() {
+        game.run("add player Pluto");
+        game.run("move Pluto 4, 2");
+
+        String result = game.run("move Pluto 2, 3");
+
+        assertEquals("Pluto rolls 2, 3. Pluto moves from 6 to 11", result);
     }
 }
 
