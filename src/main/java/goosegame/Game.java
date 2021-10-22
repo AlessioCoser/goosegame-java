@@ -1,7 +1,9 @@
 package goosegame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
@@ -33,6 +35,7 @@ class MoveCommand {
 
 public class Game {
     private final List<String> players = new ArrayList<>();
+    private final Map<String, Integer> playersAndPositions = new HashMap<>();
 
     public String run(String command) {
         MoveCommand moveCommand = new MoveCommand(command);
@@ -48,8 +51,11 @@ public class Game {
         String player = moveCommand.player();
         String firstDie = moveCommand.firstDie();
         String secondDie = moveCommand.secondDie();
-        int sum = parseInt(firstDie) + parseInt(secondDie);
-        return player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from Start to " + sum;
+        int newPosition = playersAndPositions.get(player) + parseInt(firstDie) + parseInt(secondDie);
+        String oldPosition = playersAndPositions.get(player) == 0 ? "Start" : playersAndPositions.get(player).toString();
+        String result = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + oldPosition + " to " + newPosition;
+        playersAndPositions.put(player, newPosition);
+        return result;
     }
 
     private String playerNameFrom(String command) {
@@ -61,7 +67,7 @@ public class Game {
             return playerToAdd + ": already existing player";
         }
         players.add(playerToAdd);
-
-        return "players: " +  String.join(", ", players);
+        playersAndPositions.put(playerToAdd, 0);
+        return "players: " +  String.join(", ", playersAndPositions.keySet());
     }
 }
