@@ -51,11 +51,14 @@ public class Game {
         String player = moveCommand.player();
         String firstDie = moveCommand.firstDie();
         String secondDie = moveCommand.secondDie();
-        int newPosition = playersAndPositions.get(player) + parseInt(firstDie) + parseInt(secondDie);
-        String oldPosition = playersAndPositions.get(player) == 0 ? "Start" : playersAndPositions.get(player).toString();
-        String result = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + oldPosition + " to " + newPosition;
+        int currentPosition = playersAndPositions.get(player);
+        int newPosition = currentPosition + parseInt(firstDie) + parseInt(secondDie);
         playersAndPositions.put(player, newPosition);
-        return result;
+        return player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + newPosition;
+    }
+
+    private String printCurrentPosition(int currentPosition) {
+        return currentPosition == 0 ? "Start" : String.valueOf(currentPosition);
     }
 
     private String playerNameFrom(String command) {
