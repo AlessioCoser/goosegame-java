@@ -9,7 +9,7 @@ public class GameTest {
     private Game game;
 
     @BeforeEach
-    public void newGame(){
+    public void newGame() {
         game = new Game();
     }
 
@@ -80,6 +80,15 @@ public class GameTest {
         assertEquals("Pippo rolls 2, 4. Pippo moves from 6 to 12", pippoResult);
     }
 
+    @Test
+    void movePlayerToVictoryPosition() {
+        game.run("add player Pippo");
+        game.run("move Pippo 60, 0");
+
+        String result = game.run("move Pippo 1, 2");
+
+        assertEquals("Pippo rolls 1, 2. Pippo moves from 60 to 63. Pippo Wins!!", result);
+    }
 
 }
 

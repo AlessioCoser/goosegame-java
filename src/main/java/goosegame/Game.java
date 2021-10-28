@@ -36,6 +36,7 @@ class MoveCommand {
 public class Game {
     private final List<String> players = new ArrayList<>();
     private final Map<String, Integer> playersAndPositions = new HashMap<>();
+    private static final int LAST_POSITION = 63;
 
     public String run(String command) {
         MoveCommand moveCommand = new MoveCommand(command);
@@ -54,7 +55,11 @@ public class Game {
         int currentPosition = playersAndPositions.get(player);
         int newPosition = currentPosition + parseInt(firstDie) + parseInt(secondDie);
         playersAndPositions.put(player, newPosition);
-        return player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + newPosition;
+        String message = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + newPosition;
+        if (newPosition == LAST_POSITION){
+            return  message + ". " + player + " Wins!!";
+        }
+        return message;
     }
 
     private String printCurrentPosition(int currentPosition) {
