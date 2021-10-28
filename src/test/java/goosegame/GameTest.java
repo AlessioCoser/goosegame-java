@@ -9,7 +9,7 @@ public class GameTest {
     private Game game;
 
     @BeforeEach
-    public void newGame(){
+    public void newGame() {
         game = new Game();
     }
 
@@ -65,5 +65,41 @@ public class GameTest {
 
         assertEquals("Pluto rolls 2, 3. Pluto moves from 6 to 11", result);
     }
+
+    @Test
+    void moveTwoPlayersFromPreviousPosition() {
+        game.run("add player Pluto");
+        game.run("add player Pippo");
+        game.run("move Pluto 4, 2");
+        game.run("move Pippo 5, 1");
+
+        String plutoResult = game.run("move Pluto 2, 3");
+        String pippoResult = game.run("move Pippo 2, 4");
+
+        assertEquals("Pluto rolls 2, 3. Pluto moves from 6 to 11", plutoResult);
+        assertEquals("Pippo rolls 2, 4. Pippo moves from 6 to 12", pippoResult);
+    }
+
+    @Test
+    void movePlayerToVictoryPosition() {
+        game.run("add player Pippo");
+        game.run("move Pippo 60, 0");
+
+        String result = game.run("move Pippo 1, 2");
+
+        assertEquals("Pippo rolls 1, 2. Pippo moves from 60 to 63. Pippo Wins!!", result);
+    }
+
+    @Test
+    void movePlayerBouncesBackWhenPassingVictoryPosition() {
+
+        game.run("add player Pippo");
+        game.run("move Pippo 60, 0");
+
+        String result = game.run("move Pippo 3, 2");
+
+        assertEquals("Pippo rolls 3, 2. Pippo moves from 60 to 63. Pippo bounces! Pippo returns to 61", result);
+    }
+
 }
 
