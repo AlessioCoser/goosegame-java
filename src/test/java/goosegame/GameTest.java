@@ -65,5 +65,21 @@ public class GameTest {
 
         assertEquals("Pluto rolls 2, 3. Pluto moves from 6 to 11", result);
     }
+
+    @Test
+    void moveTwoPlayersFromPreviousPosition() {
+        game.run("add player Pluto");
+        game.run("add player Pippo");
+        game.run("move Pluto 4, 2");
+        game.run("move Pippo 5, 1");
+
+        String plutoResult = game.run("move Pluto 2, 3");
+        String pippoResult = game.run("move Pippo 2, 4");
+
+        assertEquals("Pluto rolls 2, 3. Pluto moves from 6 to 11", plutoResult);
+        assertEquals("Pippo rolls 2, 4. Pippo moves from 6 to 12", pippoResult);
+    }
+
+
 }
 
