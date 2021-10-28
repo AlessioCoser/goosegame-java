@@ -90,5 +90,16 @@ public class GameTest {
         assertEquals("Pippo rolls 1, 2. Pippo moves from 60 to 63. Pippo Wins!!", result);
     }
 
+    @Test
+    void movePlayerBouncesBackWhenPassingVictoryPosition() {
+
+        game.run("add player Pippo");
+        game.run("move Pippo 60, 0");
+
+        String result = game.run("move Pippo 3, 2");
+
+        assertEquals("Pippo rolls 3, 2. Pippo moves from 60 to 63. Pippo bounces! Pippo returns to 61", result);
+    }
+
 }
 
