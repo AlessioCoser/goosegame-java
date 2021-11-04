@@ -54,20 +54,23 @@ public class Game {
         String secondDie = moveCommand.secondDie();
         int currentPosition = playersAndPositions.get(player);
         int newPosition = currentPosition + parseInt(firstDie) + parseInt(secondDie);
-        boolean isBounces = false;
-        if (newPosition > LAST_POSITION){
-            newPosition = (LAST_POSITION - (newPosition - LAST_POSITION));
-            isBounces = true;
+        boolean isBounces = newPosition > LAST_POSITION;
+        if (isBounces){
+            newPosition = bounces(player, newPosition);
+            return  player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + LAST_POSITION +". Pippo bounces! Pippo returns to "+ newPosition;
         }
         playersAndPositions.put(player, newPosition);
         String message = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + newPosition;
         if (newPosition == LAST_POSITION){
             return  message + ". " + player + " Wins!!";
         }
-        if (isBounces){
-            return  player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + LAST_POSITION +". Pippo bounces! Pippo returns to "+ newPosition;
-        }
         return message;
+    }
+
+    private int bounces(String player, int newPosition) {
+        newPosition = (LAST_POSITION - (newPosition - LAST_POSITION));
+        playersAndPositions.put(player, newPosition);
+        return newPosition;
     }
 
     private String printCurrentPosition(int currentPosition) {
