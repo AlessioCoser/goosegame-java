@@ -92,7 +92,6 @@ public class GameTest {
 
     @Test
     void movePlayerBouncesBackWhenPassingVictoryPosition() {
-
         game.run("add player Pippo");
         game.run("move Pippo 60, 0");
 
