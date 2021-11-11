@@ -36,7 +36,7 @@ class MoveCommand {
 public class Game {
     private final List<String> players = new ArrayList<>();
     private final Map<String, Integer> playersAndPositions = new HashMap<>();
-    private static final int LAST_POSITION = 63;
+    private static final int LAST_CELL = 63;
 
     public String run(String command) {
         MoveCommand moveCommand = new MoveCommand(command);
@@ -53,22 +53,23 @@ public class Game {
         String firstDie = moveCommand.firstDie();
         String secondDie = moveCommand.secondDie();
         int currentPosition = playersAndPositions.get(player);
-        int newPosition = currentPosition + parseInt(firstDie) + parseInt(secondDie);
-        boolean isBounces = newPosition > LAST_POSITION;
+        int positionAfterRoll = currentPosition + parseInt(firstDie) + parseInt(secondDie);
+        boolean isBounces = positionAfterRoll > LAST_CELL;
         if (isBounces){
-            newPosition = bounces(player, newPosition);
-            return  player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + LAST_POSITION +". Pippo bounces! Pippo returns to "+ newPosition;
+            int newPosition = bounces(player, positionAfterRoll);
+            return  player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + LAST_CELL +". Pippo bounces! Pippo returns to "+ newPosition;
         }
-        playersAndPositions.put(player, newPosition);
-        String message = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + newPosition;
-        if (newPosition == LAST_POSITION){
+        playersAndPositions.put(player, positionAfterRoll);
+        String message = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + positionAfterRoll;
+        boolean hasWin = positionAfterRoll == LAST_CELL;
+        if (hasWin){
             return  message + ". " + player + " Wins!!";
         }
         return message;
     }
 
-    private int bounces(String player, int newPosition) {
-        newPosition = (LAST_POSITION - (newPosition - LAST_POSITION));
+    private int bounces(String player, int position) {
+        int newPosition = (LAST_CELL - (position - LAST_CELL));
         playersAndPositions.put(player, newPosition);
         return newPosition;
     }
