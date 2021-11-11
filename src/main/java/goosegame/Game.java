@@ -48,24 +48,34 @@ public class Game {
         return addPlayer(playerToAdd);
     }
 
+
     private String move(MoveCommand moveCommand) {
         String player = moveCommand.player();
-        String firstDie = moveCommand.firstDie();
-        String secondDie = moveCommand.secondDie();
+        // CODE SMELL Feature envy
+        Dice dice = new Dice(Integer.parseInt(moveCommand.firstDie()),Integer.parseInt(moveCommand.secondDie()));
+
         int currentPosition = playersAndPositions.get(player);
-        int positionAfterRoll = currentPosition + parseInt(firstDie) + parseInt(secondDie);
-        boolean isBounces = positionAfterRoll > LAST_CELL;
-        if (isBounces){
+        int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond() ;
+        String rollMessage = player + " rolls " + dice.getFirst() + ", " + dice.getSecond() + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to ";
+        if (isBounces(positionAfterRoll)){
             int newPosition = bounces(player, positionAfterRoll);
-            return  player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + LAST_CELL +". Pippo bounces! Pippo returns to "+ newPosition;
+            return  rollMessage + LAST_CELL + ". Pippo bounces! Pippo returns to "+ newPosition;
         }
         playersAndPositions.put(player, positionAfterRoll);
-        String message = player + " rolls " + firstDie + ", " + secondDie + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to " + positionAfterRoll;
-        boolean hasWin = positionAfterRoll == LAST_CELL;
-        if (hasWin){
-            return  message + ". " + player + " Wins!!";
+
+
+        if (isWin(positionAfterRoll)){
+            return  rollMessage + positionAfterRoll + ". " + player + " Wins!!";
         }
-        return message;
+        return rollMessage + positionAfterRoll;
+    }
+
+    private boolean isWin(int positionAfterRoll) {
+        return positionAfterRoll == LAST_CELL;
+    }
+
+    private boolean isBounces(int positionAfterRoll) {
+        return positionAfterRoll > LAST_CELL;
     }
 
     private int bounces(String player, int position) {
