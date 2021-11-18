@@ -55,23 +55,36 @@ public class Game {
 
     private String move(MoveCommand moveCommand) {
         String player = moveCommand.player();
-        // CODE SMELL Feature envy
         Dice dice = moveCommand.getDice();
 
         int currentPosition = playersAndPositions.get(player);
         int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond() ;
-        String rollMessage = player + " rolls " + dice.getFirst() + ", " + dice.getSecond() + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to ";
         if (isBounces(positionAfterRoll)){
             int newPosition = bounces(player, positionAfterRoll);
-            return  rollMessage + LAST_CELL + ". Pippo bounces! Pippo returns to "+ newPosition;
+            return getBouncesMessage(player, dice, currentPosition, newPosition);
         }
         playersAndPositions.put(player, positionAfterRoll);
 
-
         if (isWin(positionAfterRoll)){
-            return  rollMessage + positionAfterRoll + ". " + player + " Wins!!";
+            return getWinMessage(player, dice, currentPosition, positionAfterRoll);
         }
-        return rollMessage + positionAfterRoll;
+        return getMoveMessage(player, dice, currentPosition, positionAfterRoll);
+    }
+
+    private String getMoveMessage(String player, Dice dice, int currentPosition, int positionAfterRoll) {
+        return getPlayerRollAndCurrentPositionMessage(player, dice, currentPosition) + positionAfterRoll;
+    }
+
+    private String getWinMessage(String player, Dice dice, int currentPosition, int positionAfterRoll) {
+        return getPlayerRollAndCurrentPositionMessage(player, dice, currentPosition) + positionAfterRoll + ". " + player + " Wins!!";
+    }
+
+    private String getBouncesMessage(String player, Dice dice, int currentPosition, int newPosition) {
+        return getPlayerRollAndCurrentPositionMessage(player, dice, currentPosition) + LAST_CELL + ". Pippo bounces! Pippo returns to " + newPosition;
+    }
+
+    private String getPlayerRollAndCurrentPositionMessage(String player, Dice dice, int currentPosition) {
+        return  player + " rolls " + dice.getFirst() + ", " + dice.getSecond() + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to ";
     }
 
     private boolean isWin(int positionAfterRoll) {
