@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.Integer.parseInt;
-
 class MoveCommand {
     private final String command;
     private final String[] arguments;
@@ -25,7 +23,7 @@ class MoveCommand {
     }
 
     public Dice getDice() {
-        return new Dice(Integer.parseInt(firstDie()),Integer.parseInt(secondDie()));
+        return new Dice(Integer.parseInt(firstDie()), Integer.parseInt(secondDie()));
     }
 
     private String firstDie() {
@@ -40,11 +38,12 @@ class MoveCommand {
 public class Game {
     private final List<String> players = new ArrayList<>();
     private final Map<String, Integer> playersAndPositions = new HashMap<>();
+    private final List<PlayerStatus> playersStatus = new ArrayList<PlayerStatus>();
     private static final int LAST_CELL = 63;
 
     public String run(String command) {
         MoveCommand moveCommand = new MoveCommand(command);
-        if (moveCommand.canHandle()){
+        if (moveCommand.canHandle()) {
             return move(moveCommand);
         }
 
@@ -58,14 +57,14 @@ public class Game {
         Dice dice = moveCommand.getDice();
 
         int currentPosition = playersAndPositions.get(player);
-        int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond() ;
-        if (isBounces(positionAfterRoll)){
+        int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond();
+        if (isBounces(positionAfterRoll)) {
             int newPosition = bounces(player, positionAfterRoll);
             return getBouncesMessage(player, dice, currentPosition, newPosition);
         }
         playersAndPositions.put(player, positionAfterRoll);
 
-        if (isWin(positionAfterRoll)){
+        if (isWin(positionAfterRoll)) {
             return getWinMessage(player, dice, currentPosition, positionAfterRoll);
         }
         return getMoveMessage(player, dice, currentPosition, positionAfterRoll);
@@ -84,7 +83,7 @@ public class Game {
     }
 
     private String getPlayerRollAndCurrentPositionMessage(String player, Dice dice, int currentPosition) {
-        return  player + " rolls " + dice.getFirst() + ", " + dice.getSecond() + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to ";
+        return player + " rolls " + dice.getFirst() + ", " + dice.getSecond() + ". " + player + " moves from " + printCurrentPosition(currentPosition) + " to ";
     }
 
     private boolean isWin(int positionAfterRoll) {
@@ -110,11 +109,13 @@ public class Game {
     }
 
     private String addPlayer(String playerToAdd) {
-        if(players.contains(playerToAdd)) {
+        if (playersStatus.stream().anyMatch((ps) -> ps.getPlayer().equals(playerToAdd))) {
             return playerToAdd + ": already existing player";
         }
+        // TODO REMOVE players and playersAndPositions
         players.add(playerToAdd);
         playersAndPositions.put(playerToAdd, 0);
-        return "players: " +  String.join(", ", playersAndPositions.keySet());
+        playersStatus.add(new PlayerStatus(playerToAdd));
+        return "players: " + String.join(", ", playersAndPositions.keySet());
     }
 }
