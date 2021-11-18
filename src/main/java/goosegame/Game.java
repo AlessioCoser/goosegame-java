@@ -55,7 +55,7 @@ public class Game {
     private String move(MoveCommand moveCommand) {
         String player = moveCommand.player();
         Dice dice = moveCommand.getDice();
-
+        // TODO get current playerstatus
         int currentPosition = playersAndPositions.get(player);
         int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond();
         if (isBounces(positionAfterRoll)) {
