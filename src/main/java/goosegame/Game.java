@@ -24,11 +24,15 @@ class MoveCommand {
         return arguments[1];
     }
 
-    public String firstDie() {
+    public Dice getDice() {
+        return new Dice(Integer.parseInt(firstDie()),Integer.parseInt(secondDie()));
+    }
+
+    private String firstDie() {
         return arguments[2].replace(",", "");
     }
 
-    public String secondDie() {
+    private String secondDie() {
         return arguments[3];
     }
 }
@@ -52,7 +56,7 @@ public class Game {
     private String move(MoveCommand moveCommand) {
         String player = moveCommand.player();
         // CODE SMELL Feature envy
-        Dice dice = new Dice(Integer.parseInt(moveCommand.firstDie()),Integer.parseInt(moveCommand.secondDie()));
+        Dice dice = moveCommand.getDice();
 
         int currentPosition = playersAndPositions.get(player);
         int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond() ;
