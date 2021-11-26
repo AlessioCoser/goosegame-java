@@ -100,5 +100,14 @@ public class GameTest {
         assertEquals("Pippo rolls 3, 2. Pippo moves from 60 to 63. Pippo bounces! Pippo returns to 61", result);
     }
 
+    @Test
+    void movePlayerBouncesPrintsThePlayerName() {
+        game.run("add player Pluto");
+        game.run("move Pluto 60, 0");
+
+        String result = game.run("move Pluto 3, 2");
+
+        assertEquals("Pluto rolls 3, 2. Pluto moves from 60 to 63. Pluto bounces! Pluto returns to 61", result);
+    }
 }
 

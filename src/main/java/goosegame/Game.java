@@ -48,7 +48,7 @@ public class Game {
 
     private String bouncesMessage(PlayerStatus status, Dice dice) {
         return getPlayerRollAndCurrentPositionMessage(status.getPlayer(), dice, status.previousPosition())
-                + LAST_CELL + ". " + status.getPlayer() + " bounces! Pippo returns to " + status.position();
+                + LAST_CELL + ". " + status.getPlayer() + " bounces! " + status.getPlayer() + " returns to " + status.position();
     }
 
     private PlayerStatus playerStatusFrom(String player) {
