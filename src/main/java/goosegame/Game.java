@@ -23,7 +23,7 @@ public class Game {
         Dice dice = moveCommand.getDice();
         PlayerStatus status = playerStatusFrom(player);
 
-        int positionAfterRoll = status.position() + dice.getFirst() + dice.getSecond();
+        int positionAfterRoll = status.position() + dice.sum();
 
         if (isBounces(positionAfterRoll)) {
             bounces(status, positionAfterRoll);
@@ -32,9 +32,9 @@ public class Game {
         status.updatePosition(positionAfterRoll);
 
         if (isWin(positionAfterRoll)) {
-            return getWinMessage(player, dice, status);
+            return winMessage(player, dice, status);
         }
-        return getMoveMessage(player, dice, status);
+        return moveMessage(player, dice, status);
     }
 
     private PlayerStatus playerStatusFrom(String player) {
@@ -44,11 +44,11 @@ public class Game {
                 .orElseThrow();
     }
 
-    private String getMoveMessage(String player, Dice dice, PlayerStatus status) {
+    private String moveMessage(String player, Dice dice, PlayerStatus status) {
         return getPlayerRollAndCurrentPositionMessage(player, dice, status.previousPosition()) + status.position();
     }
 
-    private String getWinMessage(String player, Dice dice, PlayerStatus status) {
+    private String winMessage(String player, Dice dice, PlayerStatus status) {
         return getPlayerRollAndCurrentPositionMessage(player, dice, status.previousPosition()) + status.position() + ". " + player + " Wins!!";
     }
 

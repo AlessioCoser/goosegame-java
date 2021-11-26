@@ -17,4 +17,7 @@ public class Dice {
         return second;
     }
 
+    int sum() {
+        return getFirst() + getSecond();
+    }
 }
