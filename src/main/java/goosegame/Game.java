@@ -1,37 +1,8 @@
 package goosegame;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-
-class MoveCommand {
-    private final String command;
-    private final String[] arguments;
-
-    public MoveCommand(String command) {
-        this.command = command;
-        this.arguments = this.command.split(" ");
-    }
-
-    public boolean canHandle() {
-        return command.startsWith("move");
-    }
-
-    public String player() {
-        return arguments[1];
-    }
-
-    public Dice getDice() {
-        return new Dice(Integer.parseInt(firstDie()), Integer.parseInt(secondDie()));
-    }
-
-    private String firstDie() {
-        return arguments[2].replace(",", "");
-    }
-
-    private String secondDie() {
-        return arguments[3];
-    }
-}
 
 public class Game {
     private final List<PlayerStatus> playersStatus = new ArrayList<>();
@@ -46,7 +17,6 @@ public class Game {
         String playerToAdd = playerNameFrom(command);
         return addPlayer(playerToAdd);
     }
-
 
     private String move(MoveCommand moveCommand) {
         String player = moveCommand.player();
