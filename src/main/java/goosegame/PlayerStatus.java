@@ -13,4 +13,13 @@ public class PlayerStatus {
     public String getPlayer() {
         return this.player;
     }
+
+    public int position() {
+        return position;
+    }
+
+    public int updatePosition(int newPosition) {
+        position = newPosition;
+        return position();
+    }
 }

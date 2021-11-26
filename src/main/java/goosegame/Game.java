@@ -1,9 +1,7 @@
 package goosegame;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class MoveCommand {
     private final String command;
@@ -37,8 +35,7 @@ class MoveCommand {
 
 public class Game {
     private final List<String> players = new ArrayList<>();
-    private final Map<String, Integer> playersAndPositions = new HashMap<>();
-    private final List<PlayerStatus> playersStatus = new ArrayList<PlayerStatus>();
+    private final List<PlayerStatus> playersStatus = new ArrayList<>();
     private static final int LAST_CELL = 63;
 
     public String run(String command) {
@@ -55,19 +52,28 @@ public class Game {
     private String move(MoveCommand moveCommand) {
         String player = moveCommand.player();
         Dice dice = moveCommand.getDice();
-        // TODO get current playerstatus
-        int currentPosition = playersAndPositions.get(player);
+        PlayerStatus status = playerStatusFrom(player);
+
+        int currentPosition = status.position();
         int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond();
+
         if (isBounces(positionAfterRoll)) {
-            int newPosition = bounces(player, positionAfterRoll);
+            int newPosition = bounces(status, positionAfterRoll);
             return getBouncesMessage(player, dice, currentPosition, newPosition);
         }
-        playersAndPositions.put(player, positionAfterRoll);
+        status.updatePosition(positionAfterRoll);
 
         if (isWin(positionAfterRoll)) {
             return getWinMessage(player, dice, currentPosition, positionAfterRoll);
         }
         return getMoveMessage(player, dice, currentPosition, positionAfterRoll);
+    }
+
+    private PlayerStatus playerStatusFrom(String player) {
+        return playersStatus.stream()
+                .filter((s) -> s.getPlayer().equals(player))
+                .findFirst()
+                .orElseThrow();
     }
 
     private String getMoveMessage(String player, Dice dice, int currentPosition, int positionAfterRoll) {
@@ -94,9 +100,9 @@ public class Game {
         return positionAfterRoll > LAST_CELL;
     }
 
-    private int bounces(String player, int position) {
+    private int bounces(PlayerStatus status, int position) {
         int newPosition = (LAST_CELL - (position - LAST_CELL));
-        playersAndPositions.put(player, newPosition);
+        status.updatePosition(newPosition);
         return newPosition;
     }
 
@@ -112,10 +118,9 @@ public class Game {
         if (playersStatus.stream().anyMatch((ps) -> ps.getPlayer().equals(playerToAdd))) {
             return playerToAdd + ": already existing player";
         }
-        // TODO REMOVE players and playersAndPositions
         players.add(playerToAdd);
-        playersAndPositions.put(playerToAdd, 0);
         playersStatus.add(new PlayerStatus(playerToAdd));
-        return "players: " + String.join(", ", playersAndPositions.keySet());
+        List<String> playerNames = playersStatus.stream().map(PlayerStatus::getPlayer).collect(Collectors.toList());
+        return "players: " + String.join(", ", playerNames);
     }
 }
