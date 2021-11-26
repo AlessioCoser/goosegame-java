@@ -53,19 +53,18 @@ public class Game {
         Dice dice = moveCommand.getDice();
         PlayerStatus status = playerStatusFrom(player);
 
-        int currentPosition = status.position();
-        int positionAfterRoll = currentPosition + dice.getFirst() + dice.getSecond();
+        int positionAfterRoll = status.position() + dice.getFirst() + dice.getSecond();
 
         if (isBounces(positionAfterRoll)) {
-            int newPosition = bounces(status, positionAfterRoll);
-            return getBouncesMessage(player, dice, currentPosition, newPosition);
+            bounces(status, positionAfterRoll);
+            return bouncesMessage(player, dice, status);
         }
         status.updatePosition(positionAfterRoll);
 
         if (isWin(positionAfterRoll)) {
-            return getWinMessage(player, dice, currentPosition, positionAfterRoll);
+            return getWinMessage(player, dice, status);
         }
-        return getMoveMessage(player, dice, currentPosition, positionAfterRoll);
+        return getMoveMessage(player, dice, status);
     }
 
     private PlayerStatus playerStatusFrom(String player) {
@@ -75,16 +74,16 @@ public class Game {
                 .orElseThrow();
     }
 
-    private String getMoveMessage(String player, Dice dice, int currentPosition, int positionAfterRoll) {
-        return getPlayerRollAndCurrentPositionMessage(player, dice, currentPosition) + positionAfterRoll;
+    private String getMoveMessage(String player, Dice dice, PlayerStatus status) {
+        return getPlayerRollAndCurrentPositionMessage(player, dice, status.previousPosition()) + status.position();
     }
 
-    private String getWinMessage(String player, Dice dice, int currentPosition, int positionAfterRoll) {
-        return getPlayerRollAndCurrentPositionMessage(player, dice, currentPosition) + positionAfterRoll + ". " + player + " Wins!!";
+    private String getWinMessage(String player, Dice dice, PlayerStatus status) {
+        return getPlayerRollAndCurrentPositionMessage(player, dice, status.previousPosition()) + status.position() + ". " + player + " Wins!!";
     }
 
-    private String getBouncesMessage(String player, Dice dice, int currentPosition, int newPosition) {
-        return getPlayerRollAndCurrentPositionMessage(player, dice, currentPosition) + LAST_CELL + ". Pippo bounces! Pippo returns to " + newPosition;
+    private String bouncesMessage(String player, Dice dice, PlayerStatus status) {
+        return getPlayerRollAndCurrentPositionMessage(player, dice, status.previousPosition()) + LAST_CELL + ". Pippo bounces! Pippo returns to " + status.position();
     }
 
     private String getPlayerRollAndCurrentPositionMessage(String player, Dice dice, int currentPosition) {
