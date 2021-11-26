@@ -34,7 +34,6 @@ class MoveCommand {
 }
 
 public class Game {
-    private final List<String> players = new ArrayList<>();
     private final List<PlayerStatus> playersStatus = new ArrayList<>();
     private static final int LAST_CELL = 63;
 
@@ -118,7 +117,6 @@ public class Game {
         if (playersStatus.stream().anyMatch((ps) -> ps.getPlayer().equals(playerToAdd))) {
             return playerToAdd + ": already existing player";
         }
-        players.add(playerToAdd);
         playersStatus.add(new PlayerStatus(playerToAdd));
         List<String> playerNames = playersStatus.stream().map(PlayerStatus::getPlayer).collect(Collectors.toList());
         return "players: " + String.join(", ", playerNames);
