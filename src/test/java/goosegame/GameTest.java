@@ -7,11 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameTest {
     private Game game;
-    private DiceThrower diceThrower = new TestableDiceThrower();
 
     @BeforeEach
     public void newGame() {
-        game = new Game(diceThrower);
+        game = new Game(new TestableDiceThrower());
     }
 
     @Test
@@ -112,7 +111,8 @@ public class GameTest {
     }
 
     @Test
-    void movePlayerThrowsTheDice() {
+    void movePlayerTheGameThrowsTheDice() {
+        Game game = new Game(new TestableDiceThrower(1, 2));
         game.run("add player Pippo");
         game.run("move Pippo 2, 2");
 
@@ -120,13 +120,4 @@ public class GameTest {
 
         assertEquals("Pippo rolls 1, 2. Pippo moves from 4 to 7", result);
     }
-
-    private static class TestableDiceThrower implements DiceThrower {
-        @Override
-        public Dice roll() {
-            return new Dice(1, 2);
-        }
-    }
 }
-
-
