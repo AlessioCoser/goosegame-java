@@ -2,10 +2,12 @@ package goosegame;
 
 public class MoveCommand {
     private final String command;
+    private DiceThrower diceThrower;
     private final String[] arguments;
 
-    public MoveCommand(String command) {
+    public MoveCommand(String command, DiceThrower diceThrower) {
         this.command = command;
+        this.diceThrower = diceThrower;
         this.arguments = this.command.split(" ");
     }
 
@@ -18,6 +20,9 @@ public class MoveCommand {
     }
 
     public Dice getDice() {
+        if(arguments.length < 3) {
+            return diceThrower.roll();
+        }
         return new Dice(Integer.parseInt(firstDie()), Integer.parseInt(secondDie()));
     }
 

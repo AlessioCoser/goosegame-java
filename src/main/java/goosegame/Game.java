@@ -7,9 +7,14 @@ import java.util.stream.Collectors;
 public class Game {
     private final List<PlayerStatus> playersStatus = new ArrayList<>();
     private static final int LAST_CELL = 63;
+    private DiceThrower diceThrower;
+
+    public Game(DiceThrower diceThrower) {
+        this.diceThrower = diceThrower;
+    }
 
     public String run(String command) {
-        MoveCommand moveCommand = new MoveCommand(command);
+        MoveCommand moveCommand = new MoveCommand(command, diceThrower);
         if (moveCommand.canHandle()) {
             return move(moveCommand);
         }
