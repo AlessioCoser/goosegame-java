@@ -10,7 +10,7 @@ public class GameTest {
 
     @BeforeEach
     public void newGame() {
-        game = new Game(new TestableDiceThrower());
+        game = new Game(new FixedDiceThrower());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class GameTest {
 
     @Test
     void movePlayerTheGameThrowsTheDice() {
-        Game game = new Game(new TestableDiceThrower(1, 2));
+        Game game = new Game(new FixedDiceThrower(1, 2));
         game.run("add player Pippo");
         game.run("move Pippo 2, 2");
 

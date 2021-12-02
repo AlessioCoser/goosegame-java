@@ -1,14 +1,14 @@
 package goosegame;
 
-public class TestableDiceThrower implements DiceThrower {
+public class FixedDiceThrower implements DiceThrower {
     private final int firstDice;
     private final int secondDice;
 
-    public TestableDiceThrower() {
+    public FixedDiceThrower() {
         this(1, 2);
     }
 
-    public TestableDiceThrower(int firstDice, int secondDice) {
+    public FixedDiceThrower(int firstDice, int secondDice) {
         this.firstDice = firstDice;
         this.secondDice = secondDice;
     }
