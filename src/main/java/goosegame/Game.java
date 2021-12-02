@@ -9,6 +9,10 @@ public class Game {
     private static final int LAST_CELL = 63;
     private DiceThrower diceThrower;
 
+    public Game() {
+        this(new RandomDiceThrower());
+    }
+
     public Game(DiceThrower diceThrower) {
         this.diceThrower = diceThrower;
     }
